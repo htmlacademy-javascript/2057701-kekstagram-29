@@ -1,4 +1,4 @@
-import {getRandomInteger, getRandomIdGenerator} from './functions.js';
+import {getRandomInteger, getRandomIdGenerator} from './utils.js';
 
 const NAMES = [ 'Иван', 'Андрей', 'Лука', 'Полина', 'Стефания', 'Катя', 'Дима', 'Арсений', 'Олеся', 'Кирилл', 'Таисия', 'Алена', 'Александр', 'Инна',
   'Оля', 'Маргарита', 'Настя', 'Даша', 'Платон', 'Елисей', 'Никита', 'Максим', 'Даниил', 'Эдик', 'Злата'
