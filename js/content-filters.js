@@ -1,4 +1,4 @@
-import {debounce, compareRandomCb, compareCommentsLengthCb} from './utils.js';
+import {debounce, compareRandomCb, compareCommentsLengthCb, clearMiniatures} from './utils.js';
 
 const FiltersId = {
   DEFAULT: '#filter-default',
@@ -6,20 +6,12 @@ const FiltersId = {
   DISCUSSED: '#filter-discussed'
 };
 const FILTERS_COUNT = 3;
-const DEFAULT_SHOWN_MINIATURES = 25;
 const ACTIVE_SELECTOR = 'img-filters__button--active';
 const RANDOM_MINIATURES_COUNT = 10;
 
 const filterContainer = document.querySelector('.img-filters');
 const filterForm = filterContainer.querySelector('.img-filters__form');
-const picturesContainer = document.querySelector('.pictures');
 
-const clearMiniatures = () => {
-  const pictures = picturesContainer.querySelectorAll('.picture');
-  for (let i = 0; i < pictures.length; i++) {
-    pictures[i].remove();
-  }
-};
 
 const checkActiveFilter = (id) =>
   filterForm.querySelector(id).classList.contains(ACTIVE_SELECTOR);
@@ -34,7 +26,7 @@ const addActiveFilterClass = (id) => {
   filterForm.querySelector(id).classList.add(ACTIVE_SELECTOR);
 };
 
-const createFilteredMiniatures = (photosWithDescriptions, renderMiniatures, clearMiniaturesDebounced, id, sortCb = false, numberToShow = DEFAULT_SHOWN_MINIATURES) => {
+const createFilteredMiniatures = (photosWithDescriptions, renderMiniatures, clearMiniaturesDebounced, id, sortCb = false, numberToShow = photosWithDescriptions.length) => {
   if (!checkActiveFilter(id)) {
     clearMiniaturesDebounced();
     if (typeof sortCb === 'function') {
@@ -63,7 +55,7 @@ const showFilter = (photosWithDescriptions, renderMiniatures) => {
   const clearMiniatureDebounced = debounce(clearMiniatures);
   for (const key in FiltersId) {
     filterForm.querySelector(FiltersId[key]).addEventListener('click',
-      setFilterListeners[FiltersId[key]](photosWithDescriptions , renderMiniatures, clearMiniatureDebounced)
+      setFilterListeners[FiltersId[key]](photosWithDescriptions, renderMiniatures, clearMiniatureDebounced)
     );
   }
 };
