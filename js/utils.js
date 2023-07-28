@@ -3,17 +3,6 @@ const getRandomInteger = (min, max) => {
   return Math.floor(result);
 };
 
-const getRandomIdGenerator = (min, max) => {
-  const ids = Array.from({length: max - min + 1}, (_, i) => min + i);
-
-  return function () {
-    const randomIndex = getRandomInteger(0, ids.length - 1);
-    const resultId = ids[randomIndex];
-    ids.splice(randomIndex, 1);
-    return resultId;
-  };
-};
-
 const isEscapeKeydown = (evt) => evt.key === 'Escape';
 
 const stopPropagation = (evt) => evt.stopPropagation();
@@ -36,4 +25,16 @@ const addStyleToElement = (element, stylePropepries) => {
   }
 };
 
-export {getRandomInteger, getRandomIdGenerator, isEscapeKeydown, stopPropagation, removeEventListenerRest, addEventListenerRest, addStyleToElement};
+const debounce = (callback, timeoutDelay = 500) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
+const compareRandomCb = () => Math.random() - 0.5;
+
+const compareCommentsLengthCb = (a, b) => b.comments.length - a.comments.length;
+
+export {getRandomInteger, isEscapeKeydown, stopPropagation, removeEventListenerRest, addEventListenerRest, addStyleToElement, debounce, compareRandomCb, compareCommentsLengthCb};
