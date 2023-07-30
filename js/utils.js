@@ -1,17 +1,6 @@
-const getRandomInteger = (min, max) => {
-  const result = Math.random() * (max - min + 1) + min;
-  return Math.floor(result);
-};
-
 const isEscapeKeydown = (evt) => evt.key === 'Escape';
 
 const stopPropagation = (evt) => evt.stopPropagation();
-
-const removeEventListenerRest = (parent, type, action, ...selectors) => {
-  for (const selector of selectors) {
-    parent.querySelector(selector).removeEventListener(type, action);
-  }
-};
 
 const addEventListenerRest = (parent, type, action, ...selectors) => {
   for (const selector of selectors) {
@@ -19,13 +8,13 @@ const addEventListenerRest = (parent, type, action, ...selectors) => {
   }
 };
 
-const addStyleToElement = (element, stylePropepries) => {
-  for (const [property, value] of Object.entries(stylePropepries)) {
+const addStyleToElement = (element, styleProperties) => {
+  for (const [property, value] of Object.entries(styleProperties)) {
     element.style.setProperty(property, value);
   }
 };
 
-const debounce = (callback, timeoutDelay = 500) => {
+const makeDebounce = (callback, timeoutDelay = 500) => {
   let timeoutId;
   return (...rest) => {
     clearTimeout(timeoutId);
@@ -33,9 +22,9 @@ const debounce = (callback, timeoutDelay = 500) => {
   };
 };
 
-const compareRandomCb = () => Math.random() - 0.5;
+const compareRandom = () => Math.random() - 0.5;
 
-const compareCommentsLengthCb = (a, b) => b.comments.length - a.comments.length;
+const compareCommentsLength = (a, b) => b.comments.length - a.comments.length;
 
 const clearMiniatures = () => {
   const pictures = document.querySelectorAll('.picture');
@@ -44,4 +33,4 @@ const clearMiniatures = () => {
   }
 };
 
-export {getRandomInteger, isEscapeKeydown, stopPropagation, removeEventListenerRest, addEventListenerRest, addStyleToElement, debounce, compareRandomCb, compareCommentsLengthCb, clearMiniatures};
+export {isEscapeKeydown, stopPropagation, addEventListenerRest, addStyleToElement, makeDebounce, compareRandom, compareCommentsLength, clearMiniatures};

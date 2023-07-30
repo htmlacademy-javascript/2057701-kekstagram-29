@@ -1,17 +1,4 @@
-const effectLevelField = document.querySelector('.effect-level');
-const effectLevelInput = effectLevelField.children[0];
-const effectLevelSlider = effectLevelField.children[1];
-const effectsList = document.querySelector('.effects__list');
-const imgUploadPreview = document.querySelector('.img-upload__preview').children[0];
-const originalEffect = effectsList.querySelector('#effect-none');
-
-const deleteHiddenClass = () => {
-  if (effectLevelSlider.classList.contains('hidden')) {
-    effectLevelSlider.classList.remove('hidden');
-    effectLevelField.classList.remove('hidden');
-  }
-  imgUploadPreview.className = '';
-};
+const NUMBER_OF_FILTERS = 6;
 
 const EffectsName = {
   'effects__preview--chrome': ['grayscale', ''],
@@ -54,7 +41,24 @@ const Options = {
   }
 };
 
-const onSliderUpdate = () => {
+const effectLevelField = document.querySelector('.effect-level');
+const effectLevelInput = effectLevelField.children[0];
+const effectLevelSlider = effectLevelField.children[1];
+const effectsList = document.querySelector('.effects__list');
+const imgUploadPreview = document.querySelector('.img-upload__preview').children[0];
+const originalEffect = effectsList.querySelector('#effect-none');
+const uploadButton = document.querySelector('#upload-file');
+const effectsPreviews = effectsList.querySelectorAll('.effects__preview');
+
+const removeHiddenClass = () => {
+  if (effectLevelSlider.classList.contains('hidden')) {
+    effectLevelSlider.classList.remove('hidden');
+    effectLevelField.classList.remove('hidden');
+  }
+  imgUploadPreview.className = '';
+};
+
+const updateOnSlider = () => {
   effectLevelInput.value = effectLevelSlider.noUiSlider.get();
   if (imgUploadPreview.className) {
     const effectOptions = EffectsName[imgUploadPreview.className];
@@ -72,7 +76,7 @@ const updateEffectSlider = (isOriginalPhoto, minSlider, maxSlider, step, effectC
       effectLevelSlider.classList.add('hidden');
     }
   } else {
-    deleteHiddenClass();
+    removeHiddenClass();
     effectLevelSlider.noUiSlider.updateOptions({
       start: maxSlider,
       range: {
@@ -119,8 +123,8 @@ const addListenersOnEffects = () => {
   });
   effectLevelSlider.classList.add('hidden');
   effectLevelField.classList.add('hidden');
-  effectLevelSlider.noUiSlider.on('update', onSliderUpdate);
-  for (let i = 0; i < 6; i++) {
+  effectLevelSlider.noUiSlider.on('update', updateOnSlider);
+  for (let i = 0; i < NUMBER_OF_FILTERS; i++) {
     effectsList.children[i].addEventListener('click', sliderSettings[i]);
   }
 };
@@ -133,4 +137,10 @@ const resetEffects = () => {
   effectLevelField.classList.add('hidden');
 };
 
-export {addListenersOnEffects, resetEffects};
+const addMiniatureEffectPreview = () => {
+  for (let i = 0; i < NUMBER_OF_FILTERS; i++) {
+    effectsPreviews[i].style.backgroundImage = `url(${URL.createObjectURL(uploadButton.files[0])})`;
+  }
+};
+
+export {addListenersOnEffects, resetEffects, addMiniatureEffectPreview};
