@@ -2,11 +2,12 @@ import {showPostErrorMessage, showPostSuccessMessage} from './messages.js';
 import {postData} from './server-api.js';
 import {closeModal} from './upload-form.js';
 
+const MAX_NUMBER_OF_HASHTAGS = 5;
+
 const uploadForm = document.querySelector('.img-upload__form');
 const submitButton = uploadForm.querySelector('#upload-submit');
 const hashtagInput = uploadForm.querySelector('input[name="hashtags"]');
-const regex = /^#[a-zа-я0-9]{1,19}$/;
-const MAX_NUMBER_OF_HASHTAGS = 5;
+const REGEX = /^#[a-zа-я0-9]{1,19}$/;
 
 const pristine = new Pristine(uploadForm, {
   classTo: 'img-upload__text',
@@ -16,15 +17,18 @@ const pristine = new Pristine(uploadForm, {
 
 const validateHashtags = () => {
   const hashtagsText = hashtagInput.value.trim().toLowerCase();
+  submitButton.disabled = false;
   if (hashtagsText === '') {
     return true;
   }
   const hashtags = hashtagsText.split(/\s+/);
   if (hashtags.length > MAX_NUMBER_OF_HASHTAGS || hashtags.length !== new Set(hashtags).size) {
+    submitButton.disabled = true;
     return false;
   }
   for (const hashtag of hashtags) {
-    if (!hashtag.match(regex)) {
+    if (!hashtag.match(REGEX)) {
+      submitButton.disabled = true;
       return false;
     }
   }
@@ -45,7 +49,6 @@ uploadForm.addEventListener('submit', (evt) => {
         showPostSuccessMessage();
       })
       .catch(() => {
-        closeModal(true);
         showPostErrorMessage();
       })
       .finally(() => {

@@ -1,6 +1,7 @@
 import {addStyleToElement, isEscapeKeydown, stopPropagation} from './utils.js';
+import {onUploadModalKeydown} from './upload-form.js';
 
-const postSuccesTemplate = document.querySelector('#success').content.querySelector('.success');
+const postSuccessTemplate = document.querySelector('#success').content.querySelector('.success');
 const postErrorTemplate = document.querySelector('#error').content.querySelector('.error');
 const renderErrorStyle = {
   'z-index': '100',
@@ -22,12 +23,17 @@ const showRenderErrorMessage = () => {
   document.body.append(alertContainer);
 };
 
-const addOnCloseListeners = (message, messageButton, messageSelector) => {
+const addOnCloseListeners = (message, messageButton, messageSelector, isErrorMessage = false) => {
 
   const closePostMessage = () => {
     document.removeEventListener('keydown', onDocumentKeydown);
     document.removeEventListener('click', closePostMessage);
     document.body.removeChild(message);
+
+    if (isErrorMessage) {
+      document.addEventListener('keydown', onUploadModalKeydown);
+    }
+
   };
 
   function onDocumentKeydown (evt) {
@@ -46,7 +52,7 @@ const addOnCloseListeners = (message, messageButton, messageSelector) => {
 
 const showPostSuccessMessage = () => {
 
-  const successMessage = postSuccesTemplate.cloneNode(true);
+  const successMessage = postSuccessTemplate.cloneNode(true);
   const successButton = successMessage.querySelector('.success__button');
   const successSelector = '.success__inner';
 
@@ -55,11 +61,13 @@ const showPostSuccessMessage = () => {
 
 const showPostErrorMessage = () => {
 
+  document.removeEventListener('keydown', onUploadModalKeydown);
+
   const errorMessage = postErrorTemplate.cloneNode(true);
   const errorButton = errorMessage.querySelector('.error__button');
   const errorSelector = '.error__inner';
 
-  addOnCloseListeners(errorMessage, errorButton, errorSelector);
+  addOnCloseListeners(errorMessage, errorButton, errorSelector, true);
 };
 
 export {showRenderErrorMessage, showPostSuccessMessage, showPostErrorMessage};
